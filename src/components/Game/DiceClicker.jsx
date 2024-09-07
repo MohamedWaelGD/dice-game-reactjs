@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import dice_1 from "../../../public/dice_1.png";
 import dice_2 from "../../../public/dice_2.png";
 import dice_3 from "../../../public/dice_3.png";
@@ -37,11 +37,8 @@ const DiceClicker = () => {
         },
     ];
     const {
-        selectedDice,
         randomDice,
         loading,
-        addDiceScore,
-        setError,
         resetScore,
         rollRandomDice
     } = useContext(DiceContext);

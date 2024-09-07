@@ -4,22 +4,13 @@ export const DiceContext = createContext();
 
 export const DiceProvider = ({ children }) => {
     const NUMBER_OF_DICES = 6;
-    const LOOP_MS = 500;
+    const LOOP_MS = 1000;
     const MAX_ROLL_MS = 3000;
     const [selectedDice, setSelectedDice] = useState();
     const [diceScore, setDiceScore] = useState(0);
     const [randomDice, setRandomDice] = useState(0);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const randomDiceRef = useRef(randomDice);
-
-    useEffect(() => {
-        randomDiceRef.current = randomDice;
-    }, [randomDice])
-
-    const addDiceScore = (value) => {
-        setDiceScore((prev) => prev + value);
-    };
 
     const selectDice = (value) => {
         setSelectedDice(value);
@@ -32,29 +23,27 @@ export const DiceProvider = ({ children }) => {
             return;
         }
 
-        let ms = 0;
         setError('');
         setLoading(true);
-        const interval = setInterval(() => {
-            ms += LOOP_MS;
-            if (ms >= MAX_ROLL_MS) {
+        let localRandomDice = randomDice;
+        let interval = 0;
+        const intervalRef = setInterval(() => {
+            interval += LOOP_MS;
+            if (interval >= MAX_ROLL_MS) {
+                console.log(selectedDice, localRandomDice + 1);
                 setLoading(false);
-                clearInterval(interval);
-                const finalRandomDice = randomDiceRef.current;
-                console.log(selectedDice, finalRandomDice);
-                if (selectedDice == finalRandomDice + 1) {
-                    addDiceScore(selectedDice);
+                if (selectedDice == localRandomDice + 1) {
+                    setDiceScore((prev) => prev + selectedDice)
                 } else {
-                    if (diceScore - 2 < 0) {
-                        addDiceScore(-diceScore);
-                    } else {
-                        addDiceScore(diceScore - 2);
-                    }
+                    setDiceScore((prev) => prev - 2 < 0 ? 0 : prev - 2);
                 }
+                clearInterval(intervalRef);
             }
             
             const randomDiceIndex = Math.floor(Math.random() * NUMBER_OF_DICES);
             setRandomDice(randomDiceIndex);
+            localRandomDice = randomDiceIndex;
+            console.log(selectedDice, localRandomDice + 1);
         }, LOOP_MS);
     };
 
