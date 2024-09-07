@@ -4,13 +4,17 @@ export const DiceContext = createContext();
 
 export const DiceProvider = ({ children }) => {
     const NUMBER_OF_DICES = 6;
-    const LOOP_MS = 1000;
+    const LOOP_MS = 200;
     const MAX_ROLL_MS = 3000;
     const [selectedDice, setSelectedDice] = useState();
     const [diceScore, setDiceScore] = useState(0);
     const [randomDice, setRandomDice] = useState(0);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        console.log("Score: ", diceScore);
+    }, [diceScore]);
 
     const selectDice = (value) => {
         setSelectedDice(value);
@@ -30,20 +34,19 @@ export const DiceProvider = ({ children }) => {
         const intervalRef = setInterval(() => {
             interval += LOOP_MS;
             if (interval >= MAX_ROLL_MS) {
-                console.log(selectedDice, localRandomDice + 1);
-                setLoading(false);
                 if (selectedDice == localRandomDice + 1) {
                     setDiceScore((prev) => prev + selectedDice)
                 } else {
                     setDiceScore((prev) => prev - 2 < 0 ? 0 : prev - 2);
                 }
+                setLoading(false);
                 clearInterval(intervalRef);
+                return
             }
             
             const randomDiceIndex = Math.floor(Math.random() * NUMBER_OF_DICES);
             setRandomDice(randomDiceIndex);
             localRandomDice = randomDiceIndex;
-            console.log(selectedDice, localRandomDice + 1);
         }, LOOP_MS);
     };
 

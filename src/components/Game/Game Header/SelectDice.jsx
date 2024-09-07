@@ -8,13 +8,13 @@ const SelectDice = () => {
     return (
         <div className="flex flex-col items-end gap-5">
             {error && <p className="text-red-500 text-lg font-semibold">{error}</p>}
-            <div className="flex gap-4">
+            <div className="flex gap-2 sm:gap-4">
                 {dices.map((v, i) => (
                     <Button
                         label={v}
                         key={i}
                         isOutline={selectedDice != v}
-                        classStyle="block w-16 h-16"
+                        classStyle="block w-12 h-12 sm:w-16 sm:h-16"
                         onClick={() => selectDice(v)}
                         disabled={loading}
                     />

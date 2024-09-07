@@ -4,7 +4,7 @@ import SelectDice from './Game Header/SelectDice'
 
 const GameHeader = () => {
   return (
-    <div className='flex justify-between items-center'>
+    <div className='flex flex-wrap justify-center sm:justify-between items-center'>
       <TotalScore/>
       <SelectDice/>
     </div>
